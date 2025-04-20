@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:todolist_app/widgets/custom_dialogbox.dart';
 import 'package:todolist_app/widgets/task_tile.dart';
 import 'package:todolist_app/models/task.dart';
 
@@ -11,6 +12,8 @@ class TasksScreen extends StatefulWidget {
 }
 
 class _TasksScreenState extends State<TasksScreen> {
+  final _controller = TextEditingController();
+
   List<Task> tasksList = [
     Task(title: "Go to the gym", isDone: false),
     Task(title: "Study Math", isDone: false),
@@ -18,72 +21,38 @@ class _TasksScreenState extends State<TasksScreen> {
 
   late TextEditingController taskController;
 
-  @override
-  void initState() {
-    taskController = TextEditingController();
-    super.initState();
+  void saveNewTask() {
+    final newtitle = _controller.text;
+
+    if (newtitle.isEmpty) return;
+
+    tasksList.add(Task(title: newtitle, isDone: false));
+
+    _controller.clear();
+    Navigator.of(context).pop();
+  }
+
+  void createNewTask() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CustomDialogbox(
+          controller: _controller,
+          saveMethod: saveNewTask,
+          cancelMethod: () => Navigator.of(context).pop(),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        onPressed: createNewTask,
         child: Icon(Icons.add),
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true, // Faz o modal não ocupar toda a tela
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            builder: (context) {
-              return Padding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                  left: 16,
-                  right: 16,
-                  top: 24,
-                ),
-                child: Column(
-                  mainAxisSize:
-                      MainAxisSize.min, // A chave aqui é o mainAxisSize.min
-                  children: [
-                    Text(
-                      "Adicionar nova tarefa",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextField(
-                      controller: taskController,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        labelText: 'Título da tarefa',
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: () {
-                        String taskTitle = taskController.text.trim();
-                        if (taskTitle.isNotEmpty) {
-                          setState(() {
-                            tasksList.add(
-                              Task(title: taskTitle, isDone: false),
-                            );
-                          });
-                          Navigator.pop(context); // Fecha o modal
-                        }
-                      },
-                      child: Text('Adicionar'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
       ),
+
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.grey,

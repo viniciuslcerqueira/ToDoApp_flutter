@@ -26,7 +26,10 @@ class _TasksScreenState extends State<TasksScreen> {
 
     if (newtitle.isEmpty) return;
 
-    tasksList.add(Task(title: newtitle, isDone: false));
+    setState(() {
+      tasksList.add(Task(title: newtitle, isDone: false));
+      print('Tarefa adicionada: $newtitle');
+    });
 
     _controller.clear();
     Navigator.of(context).pop();
@@ -49,6 +52,7 @@ class _TasksScreenState extends State<TasksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        shape: CircleBorder(),
         onPressed: createNewTask,
         child: Icon(Icons.add),
       ),
@@ -75,7 +79,9 @@ class _TasksScreenState extends State<TasksScreen> {
             (context, index) => TaskTile(
               task: tasksList[index],
               onChanged: (newValue) {
-                tasksList[index].isDone = newValue!;
+                setState(() {
+                  tasksList[index].isDone = newValue!;
+                });
               },
             ),
       ),

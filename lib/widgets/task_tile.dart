@@ -9,22 +9,18 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      height: 20,
-      child: ListTile(
-        onTap: () {
-          onChanged(!task.isDone);
-        },
-        title: Text(
-          task.title,
-          style: TextStyle(
-            decoration:
-                task.isDone ? TextDecoration.lineThrough : TextDecoration.none,
-          ),
+    return ListTile(
+      onTap: () {
+        onChanged(!task.isDone);
+      },
+      title: Text(
+        task.title,
+        style: TextStyle(
+          decoration:
+              task.isDone ? TextDecoration.lineThrough : TextDecoration.none,
         ),
-        leading: Checkbox(value: task.isDone, onChanged: onChanged),
       ),
+      leading: Checkbox(value: task.isDone, onChanged: onChanged),
     );
   }
 }

@@ -20,10 +20,19 @@ class CustomDialogbox extends StatelessWidget {
         width: 300,
         child: Column(
           children: [
-            Text("New Task", style: TextStyle(fontSize: 20, letterSpacing: 2)),
+            const Text(
+              "New Task",
+              style: TextStyle(fontSize: 20, letterSpacing: 2),
+            ),
+
+            const SizedBox(height: 10),
 
             TextField(
-              decoration: InputDecoration(border: OutlineInputBorder()),
+              controller: controller,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: "task title",
+              ),
             ),
 
             const SizedBox(height: 20),
@@ -45,7 +54,7 @@ class CustomDialogbox extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
 
                 //Cancel Button
                 MaterialButton(
